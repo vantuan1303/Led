@@ -13,8 +13,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var txt: UITextField!
     
     var n = 4
+    var lastOnLed = -1
     var margin:CGFloat = 50
-    var narginVerical: CGFloat = 100
+    var narginVerical: CGFloat = 80
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,14 +30,43 @@ class ViewController: UIViewController {
         n = Int(txt.text!)!
         if n > 1
         {
-        for indexHang in 0..<n {
-            for indexCot in 0..<n {
-                let img = UIImage(named: "Green")
-                let ball = UIImageView(image: img)
-                ball.center = CGPointMake(margin + CGFloat(indexHang) * spaceBetweenBall(), narginVerical + CGFloat(indexCot) * spaceCot())
-                self.view.addSubview(ball)
+            for indexHang in 0..<n {
+                for indexCot in 0..<n {
+                    let img = UIImage(named: "Green")
+                    let ball = UIImageView(image: img)
+                    ball.center = CGPointMake(margin + CGFloat(indexHang) * spaceBetweenBall(), narginVerical + CGFloat(indexCot) * spaceCot())
+                    ball.tag = indexHang + 100
+                    self.view.addSubview(ball)
+                }
             }
         }
+        _ = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: Selector("runningLed"), userInfo: nil, repeats: true)
+    }
+    
+
+    
+    func runningLed() {
+        if lastOnLed != -1 {
+            turnOffLed()
+        }
+        if lastOnLed != n - 1 {
+            lastOnLed = lastOnLed + 1
+        }
+        else {
+            lastOnLed = 0
+        }
+        turnOnLed()
+    }
+    
+    func turnOnLed() {
+        if let ball = self.view.viewWithTag(100 + lastOnLed) as? UIImageView {
+            ball.image = UIImage(named: "Green")
+        }
+    }
+    
+    func turnOffLed() {
+        if let ball = self.view.viewWithTag(100 + lastOnLed) as? UIImageView {
+            ball.image = UIImage(named: "Grey")
         }
     }
     
