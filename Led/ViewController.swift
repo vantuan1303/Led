@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     var lastOnLed = -1
     var margin:CGFloat = 50
     var narginVerical: CGFloat = 80
+    var rowOnLed = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +36,7 @@ class ViewController: UIViewController {
                     let img = UIImage(named: "Green")
                     let ball = UIImageView(image: img)
                     ball.center = CGPointMake(margin + CGFloat(indexHang) * spaceBetweenBall(), narginVerical + CGFloat(indexCot) * spaceCot())
-                    ball.tag = indexHang + 100
+                    ball.tag = indexHang + 100 + 100 * indexCot
                     self.view.addSubview(ball)
                 }
             }
@@ -46,6 +47,7 @@ class ViewController: UIViewController {
 
     
     func runningLed() {
+
         if lastOnLed != -1 {
             turnOffLed()
         }
@@ -54,18 +56,23 @@ class ViewController: UIViewController {
         }
         else {
             lastOnLed = 0
+            if rowOnLed < n - 1 {
+                rowOnLed = rowOnLed + 1
+            } else {
+                rowOnLed = 0
+            }
         }
         turnOnLed()
     }
     
     func turnOnLed() {
-        if let ball = self.view.viewWithTag(100 + lastOnLed) as? UIImageView {
+        if let ball = self.view.viewWithTag(100 + lastOnLed + 100 * rowOnLed) as? UIImageView {
             ball.image = UIImage(named: "Green")
         }
     }
     
     func turnOffLed() {
-        if let ball = self.view.viewWithTag(100 + lastOnLed) as? UIImageView {
+        if let ball = self.view.viewWithTag(100 + lastOnLed + 100 * rowOnLed) as? UIImageView {
             ball.image = UIImage(named: "Grey")
         }
     }
